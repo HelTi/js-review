@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vue</title>
+</head>
+
+<body>
+  <p>test</p>
+</body>
+<script>
+
+  function polyfillBind(fn, ctx) {
+    function boundFn(a) {
+      var l = arguments.length;
+
+      console.log('l', l)
+
+      return l ?
+        l > 1 ? fn.apply(ctx, arguments) : fn.call(ctx, a)
+        : fn.call(ctx)
+    }
+
+    boundFn._length = fn.length
+    return boundFn
+  }
+
+  this.x = 9
+
+  var obj = {
+    x: 11,
+    getX: function (a, b) {
+      console.log('a', a)
+      console.log('b', b)
+      return this.x
+    }
+  }
+
+  var getX = obj.getX
+  console.log(getX())
+
+  var boundGetX = polyfillBind(getX, obj)
+
+  console.log(boundGetX('1', '2'))
+</script>
+
+</html>
