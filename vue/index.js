@@ -6,8 +6,8 @@ function toString(val) {
     return val == null ?
         "" :
         typeof val === 'object' ?
-        JSON.stringify(val, null, 2) :
-        String(val)
+            JSON.stringify(val, null, 2) :
+            String(val)
 }
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -31,8 +31,8 @@ function polyFillBind(fn, ctx) {
         var l = arguments.length;
         return l ?
             l > 1 ?
-            fn.apply(ctx, arguments) :
-            fn.call(ctx, a) :
+                fn.apply(ctx, arguments) :
+                fn.call(ctx, a) :
             fn.call(ctx)
     }
     boundFn._length = fn.length;
@@ -48,5 +48,5 @@ var bind = Function.prototype.bind ?
     polyFillBind;
 
 
-console.log(undefined ==null)
-console.log('[object Object]'.slice(8,-1))
+console.log(undefined == null)
+console.log('[object Object]'.slice(8, -1))
