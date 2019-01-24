@@ -1,67 +1,57 @@
 /**
- * Created by PhpStorm.
- * User: Helti
- * Date: 2017/8/11
- * Time: 8:51
+ *传入参数时，代码不执行输出结果，而是先记忆起来
+ *当传入空的参数时，代表可以进行真正的运算
+ * @param {*} fn 
  */
+function currying1(fn) {
+  let allArgs = []
 
-// function curry(fn) {
-//     return function curried() {
-//         var args = [].slice.call(arguments);
-//         return args.length >=fn.length?
-//             fn.apply(null,args):
-//             function () {
-//                 var rest = [].slice.call(arguments);
-//                 return curried.apply(null,args.concat(rest));
-//             }
-//     }
-// }
+  return function next() {
 
-
-//第一版
-
-/**
- * @param fn
- * @returns {Function}
- */
-var curry1 = function (fn) {
-    var args = [].slice.call(arguments, 1);
-    return function () {
-        var newArgs = args.concat([].slice.call(arguments));
-        return fn.apply(this, newArgs);
+    let args = [].slice.call(arguments)
+    console.log('arguments', args)
+    if (args.length > 0) {
+      allArgs = allArgs.concat(args)
+    } else {
+      return fn.apply(null, allArgs)
     }
-}
-function add(a, b) {
-    return a + b;
-}
-var addCurry = curry1(add, 1, 2);
-console.log(addCurry());
-// var addCurry = curry(add, 1);
-// addCurry(2) // 3
+  }
 
-//第二版
+}
 
-function sub_curry(fn) {
-    var args = [].slice.call(arguments, 1);
-    return function () {
-        return fn.apply(this, args.concat([].slice.call(arguments)));
-    }
-}
-function curry2(fn, length) {
-    length = length || fn.length;
-    var slice = Array.prototype.slice;
-    return function () {
-        if (arguments.length < length) {
-            var combined = [fn].concat(slice.call(arguments));
-            return curry2(sub_curry.apply(this, combined), length - arguments.length);
-        } else {
-            return fn.apply(this, arguments);
-        }
-    }
-}
-var fn1 = curry2(function (a, b, c) {
-    return [a, b, c];
+let add1 = currying1(function () {
+  let sum = 0
+  for (let i = 0; i < arguments.length; i++) {
+    sum += arguments[i]
+  }
+  return sum
 })
-console.log(fn1("a", "b", "c"));
-console.log(fn1("a")("b"));
+add1(1)
+add1(2)
+console.log(add1())
+//console.log(add1(1)(2)(3)())
 
+function currying2(fn) {
+  let allArgs = []
+
+  return function next() {
+    let args = [].slice.call(arguments)
+    if (args.length > 0) {
+      allArgs = allArgs.concat(args)
+      return next
+    } else {
+      return fn.apply(null, allArgs)
+    }
+  }
+}
+
+let add2 = currying2(function () {
+  let sum = 0
+  let args = [].slice.call(arguments)
+  for (let i = 0; i < args.length; i++) {
+    sum += args[i]
+  }
+  return sum
+})
+
+console.log(add2(1)(2)(3)())
