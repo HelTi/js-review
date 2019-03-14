@@ -6,3 +6,15 @@
 const ary = (fn, n) => (...args) => fn(...args.slice(0, n))
 const firstTwoMax = ary(Math.max, 2)
 console.log([[2, 6, 'a'], [8, 4, 6], [10]].map(x => firstTwoMax(...x)));
+
+let f = ['1','2','3','4','5','6','7','8']
+
+function loop() {
+  console.log(Date.now()/100)
+  console.log(Math.floor((Date.now()/100)))
+  let c = f[Math.floor((Date.now()/100)%f.length)]
+  console.log(c)
+  setTimeout(loop,1000)
+}
+
+loop()
