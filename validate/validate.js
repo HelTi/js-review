@@ -32,7 +32,8 @@ let testPa = {
 let testPaRules = {
   userName: {
     type: String,
-    required: true
+    required: true,
+    errmsg: '请填写用户名'
   },
   password: {
     type: Number,
@@ -40,7 +41,8 @@ let testPaRules = {
       min: 6,
       max: 16
     },
-    required: true
+    required: true,
+    errmsg: '请填写用户密码'
   }
 };
 
