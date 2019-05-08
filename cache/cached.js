@@ -4,17 +4,17 @@
  * @param {*} fn
  */
 function cached(fn) {
-  var cache = Object.create(null);
+  var cache = Object.create(null)
   return function cachedFn(str) {
-    var hit = cache[str];
-    console.log(cache);
-    return hit || (cache[str] = fn(str));
-  };
+    var hit = cache[str]
+    console.log(cache)
+    return hit || (cache[str] = fn(str))
+  }
 }
 
 var toUpperCase = cached(function(a) {
-  return a.toUpperCase();
-});
+  return a.toUpperCase()
+})
 
 // console.log(toUpperCase("aa"));
 // console.log(toUpperCase("bb"));
@@ -23,33 +23,33 @@ var toUpperCase = cached(function(a) {
 // 可传多参数的cache
 
 function cached2(fn) {
-  var cache = Object.create(null);
+  var cache = Object.create(null)
   return function() {
-    var args = Array.prototype.slice.call(arguments);
+    var args = Array.prototype.slice.call(arguments)
     if (args.length < 1) {
-      throw new Error("no arguments");
+      throw new Error('no arguments')
     } else {
-      var str = args.join("-");
-      console.log(cache);
-      return cache[str] || (cache[str] = fn.apply(fn, arguments));
+      var str = args.join('-')
+      console.log(cache)
+      return cache[str] || (cache[str] = fn.apply(fn, arguments))
     }
-  };
+  }
 }
 
 var sum = cached2(function(a, b) {
-  return a + b;
-});
+  return a + b
+})
 
 var toUpperCase2 = cached2(function(a) {
-  return a.toUpperCase();
-});
+  return a.toUpperCase()
+})
 
-console.log("sum-----");
-console.log(sum(1, 2));
-console.log(sum(1, 9));
-console.log(sum(1, 2));
-console.log(sum(1, 2));
+console.log('sum-----')
+console.log(sum(1, 2))
+console.log(sum(1, 9))
+console.log(sum(1, 2))
+console.log(sum(1, 2))
 
-console.log(toUpperCase2("aa"));
-console.log(toUpperCase2("bb"));
-console.log(toUpperCase2("aa"));
+console.log(toUpperCase2('aa'))
+console.log(toUpperCase2('bb'))
+console.log(toUpperCase2('aa'))
