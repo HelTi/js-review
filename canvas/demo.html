@@ -2,21 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0,viewport-fit=cover">
     <title>canvas</title>
 </head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    html,body{
+        width: 100%;
+        overflow-x: hidden;
+    }
+</style>
 <body>
 <div>
     <p>canvas</p>
 </div>
 <div class="modal">
-    <canvas id="poster-canvas" width="300" height="500"></canvas>
+    <canvas id="poster-canvas"></canvas>
 </div>
 
 <div class="modal">
     <img style="width: 100%;" id="poster-img"
-         src="https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_d8826b7d3835459fb1cc4076f6d680a3.jpg">
+         src="">
 </div>
 <div>
     <img id="qrcode" src="">
@@ -25,10 +36,10 @@
 <script src="./qrcode.min.js"></script>
 <script src="./poster.js"></script>
 <script>
-  QRCode.toDataURL('https://m.ztbest.com/pages/goods/detail.html?productId=5043', function (err, url) {
-    console.log('url', url)
-    document.getElementById('qrcode').setAttribute('src', url)
-  })
+//   QRCode.toDataURL('https://m.ztbest.com/pages/goods/detail.html?productId=5043', function (err, url) {
+//     console.log('url', url)
+//     document.getElementById('qrcode').setAttribute('src', url)
+//   })
 
 </script>
 </html>

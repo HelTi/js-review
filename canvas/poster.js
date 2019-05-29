@@ -1,81 +1,107 @@
-console.log('poster')
-const theCanvas = document.getElementById('poster-canvas')
-const ctx = theCanvas.getContext('2d')
-
 let posterImgDom = document.getElementById('poster-img')
-let imgUrl1 = './b.jpg'
 
-let ratio = getPixelRatio(ctx);
-
-let canvasWidth = theCanvas.width,
-  canvasHeight = theCanvas.height;
-
-let screenWidth = document.documentElement.clientWidth
-
-// 已设计图 750计算
-function rootRem(designPx) {
-  return (screenWidth / 750) * designPx
-}
-
-function setPx(designPx) {
-  return rootRem(designPx) * ratio
-}
-
-// 设置高度，宽度
-theCanvas.width = setPx(750)
-theCanvas.height = setPx(1100)
-
-//ctx.font = 16 * ratio + 'px';
-// ctx.fillText("肥牛三包装", 100, 150);
-
-writeText('天山雪莲三包装', ctx, 20, 800)
-writeText('¥69.90', ctx, 20, 850, {
-  color: '#FF0000'
-})
-//posterCanvasToImg(theCanvas)
-
-drawImage(imgUrl1, ctx, function () {
-  console.log('11', ctx)
-  posterCanvasToImg(theCanvas)
-})
-
-function drawImage(path, ctx, cb) {
-  var img = new Image();
-  img.src = imgUrl1;
-  img.onload = function () {
-    console.log('toRem(750)', setPx(750))
-    ctx.drawImage(img, 0, 0, setPx(750), setPx(750))
-    cb && cb()
-  };
-}
-
-function writeText(text, ctx, x, y, opt) {
-  console.log('fpx', setPx(32))
-  ctx.font = setPx(32) + 'px serif';
-  if (opt && opt.color) {
-    ctx.fillStyle = opt.color;
-  } else {
-    ctx.fillStyle = '#000000';
+class Poster {
+  constructor(canvasId, opt) {
+    this.canvas = document.getElementById(canvasId)
+    this.ctx = this.canvas.getContext('2d')
+    // 可视宽度
+    this.screenWidth = document.documentElement.clientWidth
+    this.ratio = getPixelRatio(this.ctx)
+    this.canvas.width = this.setPx(750)
+    this.canvas.height = this.setPx(1200)
+    this.imgUrl = './a.jpg'
   }
-  console.log(setPx(x), setPx(y))
-  ctx.fillText(text, setPx(x), setPx(y));
+
+  init() {
+    //this.setCanvasBackgroundColor()
+    this.writeText('天山雪莲三包装', 20, 800)
+    this.writeText('¥69.90', 20, 850, {
+      color: '#FF0000',
+      fontSize: 22
+    })
+
+    let p1 = this.drawImage(this.imgUrl, {
+      w: 750,
+      h: 750
+    }).then(res => {
+      console.log('画图完毕')
+    })
+
+    let p2 = this.drawQrCode()
+
+    Promise.all([p1,p2]).then(res => {
+
+      this.posterCanvasToImg().then(dataUrl => {
+        console.log(dataUrl)
+        posterImgDom.setAttribute('src', dataUrl)
+      })
+    })
+  }
+
+  setCanvasBackgroundColor(color = '#FFFFFF'){
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  drawImage(path, {x = 0, y = 0, w = 300, h = 300} = {}) {
+    this.ctx.restore()
+    return new Promise((resolve, reject) => {
+      let img = new Image()
+      img.onload = () => {
+        this.ctx.drawImage(img, Math.floor(this.setPx(x)), Math.floor(this.setPx(y)), Math.floor(this.setPx(w)), Math.floor(this.setPx(h)))
+        resolve()
+        this.ctx.save()
+      }
+      img.src = path
+    })
+  }
+
+  drawQrCode() {
+    return new Promise((resolve, reject) => {
+      QRCode.toDataURL('https://m.ztbest.com/pages/goods/detail.html?productId=5043', (err, url) => {
+        document.getElementById('qrcode').setAttribute('src', url)
+
+        this.drawImage(url, {
+          x: 450,
+          y: 750,
+          w: 300,
+          h: 300
+        }).then(res => {
+          resolve()
+        })
+      })
+    })
+  }
+
+  writeText(text, x, y, {fontSize = 32, color = '#000000'} = {}) {
+    this.ctx.font = this.setPx(fontSize) + 'px serif'
+    this.ctx.fillStyle = color
+    this.ctx.fillText(text, this.setPx(x), this.setPx(y))
+  }
+
+  setPx(designPx) {
+    let toRem = (this.screenWidth / 750) * designPx
+    return (toRem * this.ratio)
+  }
+
+  posterCanvasToImg() {
+    return new Promise((resolve, reject) => {
+      resolve(this.canvas.toDataURL('image/jpg'))
+    })
+  }
 }
 
-function posterCanvasToImg(canvas) {
-  let base64 = canvas.toDataURL('image/png')
-
-  posterImgDom.setAttribute('src', base64)
-}
-
+new Poster('poster-canvas').init()
 
 //获取canvas应该放大的倍数的方法；
 function getPixelRatio(context) {
-  var backingStore = context.backingStorePixelRatio
-    || context.webkitBackingStorePixelRatio
-    || context.mozBackingStorePixelRatio
-    || context.msBackingStorePixelRatio
-    || context.oBackingStorePixelRatio
-    || context.backingStorePixelRatio || 1;
-  return (window.devicePixelRatio || 1) / backingStore;
-
+  var backingStore =
+    context.backingStorePixelRatio ||
+    context.webkitBackingStorePixelRatio ||
+    context.mozBackingStorePixelRatio ||
+    context.msBackingStorePixelRatio ||
+    context.oBackingStorePixelRatio ||
+    context.backingStorePixelRatio ||
+    1
+  return (window.devicePixelRatio || 1) / backingStore
 }
