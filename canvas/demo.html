@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas</title>
+</head>
+<body>
+<div>
+    <p>canvas</p>
+</div>
+<div class="modal">
+    <canvas id="poster-canvas" width="300" height="500"></canvas>
+</div>
+
+<div class="modal">
+    <img style="width: 100%;" id="poster-img"
+         src="https://fscdn.zto.com/GetPublicFile/ztPK4Y-WGgWKiRNfkygd3oYQ/thumbnail_d8826b7d3835459fb1cc4076f6d680a3.jpg">
+</div>
+<div>
+    <img id="qrcode" src="">
+</div>
+</body>
+<script src="./qrcode.min.js"></script>
+<script src="./poster.js"></script>
+<script>
+  QRCode.toDataURL('https://m.ztbest.com/pages/goods/detail.html?productId=5043', function (err, url) {
+    console.log('url', url)
+    document.getElementById('qrcode').setAttribute('src', url)
+  })
+
+</script>
+</html>
