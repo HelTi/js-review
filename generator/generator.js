@@ -1,7 +1,3 @@
-/**
- * Created by Administrator on 2017/6/22 0022.
- */
-const log = require('../log');
 /*
  * Generator 函数有多种理解角度。从语法上，首先可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。
 
@@ -11,28 +7,45 @@ const log = require('../log');
  *
  * */
 function* helloWorldGenerator() {
-    yield 'hello';
-    yield 'world';
-    return 'ending';
+  yield "hello";
+  yield "world";
 }
 
 var hw = helloWorldGenerator();
-hw.next()
+console.log(hw.next());
 // { value: 'hello', done: false }
 
-hw.next()
+console.log(hw.next());
 // { value: 'world', done: false }
 
-hw.next()
+console.log(hw.next());
 // { value: 'ending', done: true }
 
-hw.next()
+console.log(hw.next());
 // { value: undefined, done: true }
 
 function* f() {
-    console.log('执行了');
+  console.log("执行了");
 }
 var generator = f();
-setTimeout(function () {
-    generator.next()
-},2000)
+setTimeout(function() {
+  generator.next();
+}, 2000);
+
+function* gen() {
+  yield* [1, 2, 3];
+}
+
+console.log(gen().next());
+
+function* genFuncWithReturn() {
+  yield "a";
+  yield "b";
+  return "the result";
+}
+function* logReturned(genObj) {
+  let result = yield* genObj;
+  console.log(result);
+}
+
+console.log([...logReturned(genFuncWithReturn())]);
