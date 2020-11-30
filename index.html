@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
+  </head>
+  <body></body>
+  <script>
+    (function () {
+      var counter = 1;
 
-</body>
+      function increment(value) {
+          console.log('1')
+        counter += value;
+      }
+
+      function get() {
+        return counter;
+      }
+
+      window.abc = {
+        increment: increment,
+        get: get,
+      };
+    })();
+  </script>
+  <script>
+    abc.increment(1);
+  </script>
 </html>
